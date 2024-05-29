@@ -54,6 +54,10 @@
             "@php artisan ide-helper:eloquent",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -n"
+        ],
+        "clean": [
+            "./vendor/bin/pint --dirty",
+            "./vendor/bin/phpstan -n"
         ]
     },
     "extra": {
