@@ -1,0 +1,3 @@
+{
+    "php.validate.executablePath": "./docker/8.3/php"
+}
