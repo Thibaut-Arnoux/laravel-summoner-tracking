@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "open-southeners.laravel-pint",
+        "onecentlin.laravel-blade",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "swordev.phpstan",
+        "ms-azuretools.vscode-docker",
+        "vivaxy.vscode-conventional-commits",
+    ]
+}
