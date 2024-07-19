@@ -25,7 +25,7 @@ jobs:
         with:
           context: .
           file: ./docker/ci/Dockerfile
-          tags: thibautarnoux/laravel-summoner-tracking:ci
+          tags: thibautarnoux/laravel-summoner-tracking:ci # TODO: check for dynamic tag
           labels: ${{ steps.meta.outputs.labels }}
           push: true
   run-ci:
@@ -45,5 +45,8 @@ jobs:
         run: ./vendor/bin/pint
       - name: Static analysis
         run: ./vendor/bin/phpstan
+        # Use to fix laravel test warning, env variables are set on container level
+      - name: Empty testing envfile
+        run: touch .env.testing
       - name: Test
         run: php artisan test --compact
