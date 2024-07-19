@@ -1,6 +1,6 @@
 name: CI via Docker
 on:
-  wokflow_dispatch:
+  workflow_dispatch:
   pull_request:
     branches:
       - master
