@@ -25,7 +25,7 @@ jobs:
         with:
           context: .
           file: ./docker/ci/Dockerfile
-          tags: ci
+          tags: thibautarnoux/laravel-summoner-tracking:ci
           labels: ${{ steps.meta.outputs.labels }}
           push: true
   # run-ci:
