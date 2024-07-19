@@ -31,11 +31,12 @@ jobs:
   run-ci:
     needs: build-ci
     runs-on: ubuntu-latest
-    environment: ci
+    # environment: ci
     container:
       image: thibautarnoux/laravel-summoner-tracking:ci
       env:
         APP_KEY: ${{ secrets.APP_KEY }}
+        # TODO: add env variables (use testing database and set up postgres service)
     defaults:
       run:
         working-directory: /var/www/html
@@ -44,3 +45,5 @@ jobs:
         run: ./vendor/bin/pint
       - name: Static analysis
         run: ./vendor/bin/phpstan
+      - name: Test
+        run: php artisan test --compact
