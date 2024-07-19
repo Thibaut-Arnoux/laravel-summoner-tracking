@@ -51,4 +51,5 @@ jobs:
       - name: Test
         run: php artisan test --compact
       - name: Test coverage
-        run: php artisan test --compact --coverage --min=70
+        run: php artisan test --coverage --min=70
+        # TODO: Test docker build images (php-fpm / apache )for production
