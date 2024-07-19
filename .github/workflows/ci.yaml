@@ -29,7 +29,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           push: true
   run-ci:
+    needs: build-ci
     runs-on: ubuntu-latest
+    environment: ci
     container:
       image: thibautarnoux/laravel-summoner-tracking:ci
       env:
@@ -40,3 +42,5 @@ jobs:
     steps:
       - name: Lint
         run: ./vendor/bin/pint
+      - name: Static analysis
+        run: ./vendor/bin/phpstan
