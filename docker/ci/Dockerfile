@@ -23,7 +23,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY --chown=www-data:www-data . ./
+COPY --chown=www-data:www-data . .
 COPY --from=frontend-builder /build/public/build ./public/build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
