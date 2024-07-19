@@ -28,7 +28,15 @@ jobs:
           tags: thibautarnoux/laravel-summoner-tracking:ci
           labels: ${{ steps.meta.outputs.labels }}
           push: true
-  # run-ci:
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: thibautarnoux/laravel-summoner-tracking:ci
+  run-ci:
+    runs-on: ubuntu-latest
+    container:
+      image: thibautarnoux/laravel-summoner-tracking:ci
+      env:
+        APP_KEY: ${{ secrets.APP_KEY }}
+    defaults:
+      run:
+        working-directory: /var/www/html
+    steps:
+      - name: Lint
+        run: ./vendor/bin/pint
