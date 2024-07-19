@@ -15,7 +15,6 @@ FROM php:8.3-fpm
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    # gnupg gosu supervisor libcap2-bin
     && apt-get install -y zip unzip libpq-dev \
     # php extensions
     && docker-php-ext-install pdo pdo_pgsql sockets \
