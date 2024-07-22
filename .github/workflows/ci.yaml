@@ -39,16 +39,15 @@ jobs:
         DB_CONNECTION: pgsql
         DB_HOST: pgsql
         DB_PORT: 5432
-        # DB_DATABASE: testing # override in phpunit.xml
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     services:
       pgsql:
         image: postgres:15
         env:
-          POSTGRES_DB: testing
+          POSTGRES_DB: testing # defined in phpunit.xml
           POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
     defaults:
       run:
         working-directory: /var/www/html
