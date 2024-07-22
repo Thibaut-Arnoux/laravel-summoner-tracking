@@ -1,19 +1,20 @@
 <?php
 
-namespace Tests\Feature;
-
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
+it('should call the welcome page successfully', function () {
+    /** @var TestCase $this */
+    $response = $this->get('/');
 
-        $response->assertStatus(200);
-    }
-}
+    expect($response->getStatusCode())
+        ->toBe(Response::HTTP_OK);
+});
+
+it('should access to the database successfully', function () {
+    User::factory()->create();
+
+    /** @var TestCase $this */
+    $this->assertDatabaseCount('users', 1);
+});
