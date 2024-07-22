@@ -28,6 +28,9 @@ jobs:
           tags: thibautarnoux/laravel-summoner-tracking:ci # TODO: check for dynamic tag
           labels: ${{ steps.meta.outputs.labels }}
           push: true
+      - name: Output Github Context
+        run: |
+          echo "${{ toJson(github) }}"
   run-ci:
     needs: build-ci
     runs-on: ubuntu-latest
