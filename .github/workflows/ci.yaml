@@ -25,19 +25,18 @@ jobs:
         with:
           context: .
           file: ./docker/ci/Dockerfile
-          tags: thibautarnoux/laravel-summoner-tracking:ci # TODO: check for dynamic tag
+          tags: thibautarnoux/laravel-summoner-tracking:pr-${{ github.event.number }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
       - name: Output Github Context
         run: |
-          echo "${{ toJson(github) }}"
-          echo ${{ github.ref_name }}
+          echo "${{ github.event.number }}"
   run-ci:
     needs: build-ci
     runs-on: ubuntu-latest
     environment: ci
     container:
-      image: thibautarnoux/laravel-summoner-tracking:ci
+      image: thibautarnoux/laravel-summoner-tracking:pr-${{ github.event.number }}
       env:
         APP_KEY: ${{ secrets.APP_KEY }}
         DB_CONNECTION: pgsql
@@ -58,8 +57,7 @@ jobs:
     steps:
       - name: Output Github Context
         run: |
-          echo "${{ toJson(github) }}"
-          echo ${{ github.ref_name }}
+          echo "${{ github.event.number }}"
       - name: Lint
         run: ./vendor/bin/pint
       - name: Static analysis
