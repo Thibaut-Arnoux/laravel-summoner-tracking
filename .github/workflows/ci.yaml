@@ -1,10 +1,16 @@
 name: CI via Docker
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
     branches:
       - master
 jobs:
   build-ci:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     environment: ci
     steps:
@@ -14,7 +20,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: thibautarnoux/laravel-summoner-tracking
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-summoner-tracking
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -25,12 +31,9 @@ jobs:
         with:
           context: .
           file: ./docker/ci/Dockerfile
-          tags: thibautarnoux/laravel-summoner-tracking:pr-${{ github.event.number }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-summoner-tracking:pr-${{ github.event.number }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
-      - name: Output Github Context
-        run: |
-          echo "${{ github.event.number }}"
   run-ci:
     needs: build-ci
     runs-on: ubuntu-latest
@@ -55,9 +58,6 @@ jobs:
       run:
         working-directory: /var/www/html
     steps:
-      - name: Output Github Context
-        run: |
-          echo "${{ github.event.number }}"
       - name: Lint
         run: ./vendor/bin/pint
       - name: Static analysis
@@ -70,3 +70,18 @@ jobs:
       - name: Test coverage
         run: php artisan test --coverage --min=70
         # TODO: Test docker build images (php-fpm / apache )for production
+  clean-ci:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    environment: ci
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Delete Docker Hub Tag
+        run: |
+          docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/laravel-summoner-tracking:pr-${{ github.event.number }}
