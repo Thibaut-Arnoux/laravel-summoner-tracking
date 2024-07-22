@@ -43,7 +43,7 @@ jobs:
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     services:
-      postgres:
+      pgsql:
         image: postgres:15
         env:
           POSTGRES_DB: testing
