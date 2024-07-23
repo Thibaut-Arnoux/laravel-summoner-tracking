@@ -14,6 +14,8 @@ async function getToken(username, password, version) {
         }
     );
 
+    core.notice(JSON.stringify(jsonObj.result));
+
     return jsonObj.result.token;
 }
 
@@ -32,7 +34,7 @@ async function deleteTag(username, repository, tag, token, version) {
 
     const result = await httpClient.del(`${baseUrl}/repositories/${username}/${repository}/tags/${tag}`);
 
-    core.notice(JSON.stringify(result));
+    core.notice(JSON.stringify(result.message));
 
     // if (result.message.statusCode !== 204) {
     //     throw new Error(`Failed to delete tag : ${tag}`);
