@@ -71,8 +71,7 @@ jobs:
         run: php artisan test --coverage --min=70
         # TODO: Test docker build images (php-fpm / apache )for production
   clean-ci:
-    # if: github.event.action == 'closed'
-    needs: run-ci
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     environment: ci
     steps:

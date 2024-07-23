@@ -27,11 +27,6 @@ async function deleteTag(username, repository, tag, token, version) {
 
     const result = await httpClient.del(`${baseUrl}/repositories/${username}/${repository}/tags/${tag}`);
 
-    let body = await result.readBody();
-    core.notice(body);
-    core.notice(result.message.statusCode);
-    core.notice(result.message.statusMessage);
-
     if (result.message.statusCode !== 204) {
         throw new Error(`Failed to delete tag : ${tag}`);
     }
