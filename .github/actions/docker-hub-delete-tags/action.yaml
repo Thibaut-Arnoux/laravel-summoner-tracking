@@ -1,0 +1,22 @@
+name: "Docker hub delete tag"
+description: "Delete tag from docker hub"
+inputs:
+  username:
+    description: "Docker hub username"
+    required: true
+  password:
+    description: "Docker hub password"
+    required: true
+  repository:
+    description: "Docker hub repository"
+    required: true
+  tag:
+    description: "Docker hub tag"
+    required: true
+  version:
+    description: "Docker hub version"
+    required: false
+    default: "v2"
+runs:
+  using: "node20"
+  main: "index.js"
