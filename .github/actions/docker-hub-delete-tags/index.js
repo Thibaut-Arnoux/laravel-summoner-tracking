@@ -17,7 +17,7 @@ async function getToken(username, password, version) {
     return jsonObj.result.token;
 }
 
-async function deleteTag(username, repository, tag, token) {
+async function deleteTag(username, repository, tag, token, version) {
     const accessTokenHandler = new auth.PersonalAccessTokenCredentialHandler(token);
     const httpClient = new http.HttpClient(
         'docker-hub-delete-tags',
@@ -41,7 +41,7 @@ async function run() {
     const version = core.getInput('version', { required: true });
 
     const token = await getToken(username, password, version);
-    await deleteTag(username, repository, tag, token);
+    await deleteTag(username, repository, tag, token, version);
 }
 
 run();
