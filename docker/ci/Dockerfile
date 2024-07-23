@@ -18,14 +18,17 @@ RUN apt-get update \
     && apt-get install -y zip unzip libpq-dev \
     # php extensions
     && docker-php-ext-install pdo pdo_pgsql sockets \
+    # xdebug in coverage mode required for pest coverage cli
+    && pecl install xdebug && docker-php-ext-enable xdebug \
     # clean
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY --chown=www-data:www-data . ./
+COPY --chown=www-data:www-data . .
 COPY --from=frontend-builder /build/public/build ./public/build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY docker/ci/php.ini /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
 
 USER www-data
 
