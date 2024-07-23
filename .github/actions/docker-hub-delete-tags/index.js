@@ -14,27 +14,23 @@ async function getToken(username, password, version) {
         }
     );
 
-    core.notice(JSON.stringify(jsonObj.result));
-
     return jsonObj.result.token;
 }
 
 async function deleteTag(username, repository, tag, token, version) {
     const accessTokenHandler = new auth.PersonalAccessTokenCredentialHandler(token);
-
-    core.notice(token);
-
     const httpClient = new http.HttpClient(
         'docker-hub-delete-tags',
         [accessTokenHandler],
     );
     const baseUrl = `https://hub.docker.com/${version}`;
 
-    core.notice(JSON.stringify(`${baseUrl}/repositories/${username}/${repository}/tags/${tag}`));
-
     const result = await httpClient.del(`${baseUrl}/repositories/${username}/${repository}/tags/${tag}`);
 
-    core.notice(JSON.stringify(result.message));
+    body = await result.readBody();
+    core.notice(body);
+    core.notice(result.message.statusCode);
+    core.notice(result.message.statusMessage);
 
     // if (result.message.statusCode !== 204) {
     //     throw new Error(`Failed to delete tag : ${tag}`);
