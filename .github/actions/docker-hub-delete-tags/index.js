@@ -1,11 +1,9 @@
 const core = require('@actions/core');
 const http = require('@actions/http-client');
-
-import { HttpClient } from '@actions/http-client';
-import { PersonalAccessTokenCredentialHandler } from '@actions/http-client/lib/auth';
+const auth = require('@actions/http-client/lib/auth');
 
 async function getToken(username, password, version) {
-    const httpClient = new HttpClient('docker-hub-delete-tags');
+    const httpClient = new http.HttpClient('docker-hub-delete-tags');
     const baseUrl = `https://hub.docker.com/${version}`;
 
     const jsonObj = await httpClient.postJson(
@@ -20,8 +18,8 @@ async function getToken(username, password, version) {
 }
 
 async function deleteTag(username, repository, tag, token) {
-    const accessTokenHandler = new PersonalAccessTokenCredentialHandler(token);
-    const httpClient = new HttpClient(
+    const accessTokenHandler = new auth.PersonalAccessTokenCredentialHandler(token);
+    const httpClient = new http.HttpClient(
         'docker-hub-delete-tags',
         [accessTokenHandler],
     );
