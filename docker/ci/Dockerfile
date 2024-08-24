@@ -1,4 +1,4 @@
-# Builder for front end
+# Front Static Assets
 FROM node:20 AS frontend-builder
 
 WORKDIR /build
@@ -9,7 +9,7 @@ COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.co
 RUN npm ci \
     && npm run build
 
-# Ci Image for PHP
+# Php Ci Layer
 FROM php:8.3-fpm
 
 WORKDIR /var/www/html
@@ -26,7 +26,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --chown=www-data:www-data . .
-COPY --from=frontend-builder /build/public/build ./public/build
+COPY --from=frontend-builder --chown=www-data:www-data /build/public/build ./public/build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY docker/ci/php.ini /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
 
