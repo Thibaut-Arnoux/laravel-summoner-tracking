@@ -54,6 +54,9 @@ jobs:
           POSTGRES_DB: testing # defined in phpunit.xml
           POSTGRES_USER: ${{ secrets.DB_USERNAME }}
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      dind:
+        image: docker
+        options: --privileged # Required for Docker-in-Docker
     defaults:
       run:
         working-directory: /var/www/html
