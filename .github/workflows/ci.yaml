@@ -69,7 +69,18 @@ jobs:
         run: php artisan test --compact
       - name: Test coverage
         run: php artisan test --coverage --min=70
-        # TODO: Test docker build images (php-fpm / apache )for production
+      - name: Test Build Apache image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/production/apache2/Dockerfile
+          push: false
+      - name: Test Build Php image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/production/php/Dockerfile
+          push: false
   clean-ci:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
