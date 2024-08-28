@@ -57,6 +57,8 @@ jobs:
       docker:
         image: docker:dind
         options: --privileged # Required for Docker-in-Docker
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
     defaults:
       run:
         working-directory: /var/www/html
@@ -72,6 +74,10 @@ jobs:
         run: php artisan test --compact
       - name: Test coverage
         run: php artisan test --coverage --min=70
+      - name: Install Docker
+        run: |
+          apt-get update
+          apt-get install -y docker.io
       - name: Docker
         run: |
           docker version
