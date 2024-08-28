@@ -3,8 +3,12 @@ FROM node:20 AS frontend-builder
 
 WORKDIR /build
 
+COPY /app/Livewire ./app/Livewire
+COPY /app/View/Components ./app/View/Components
 COPY /resources ./resources
 COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
+
+# TODO : add mary ui required in tailwind config
 
 RUN npm ci \
     && npm run build
@@ -27,6 +31,6 @@ RUN sed -i \
 USER www-data
 
 COPY --chown=www-data:www-data /public ./public
-COPY --from=frontend-builder --chown=www-data:www-data /build/public/build ./public/build
+COPY --from=frontend-builder --chown=www-data:www-data /build/public/build/assets ./public/build/assets
 
 CMD ["httpd-foreground", "-C", "PidFile /tmp/httpd.pid"]
