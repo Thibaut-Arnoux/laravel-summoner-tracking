@@ -15,6 +15,6 @@ COPY --chown=www-data:www-data . .
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY docker/production/php/php.ini /usr/local/etc/php/conf.d/docker-php-ext-production.ini
 
-# USER www-data
+USER www-data
 
 RUN composer install --optimize-autoloader --no-dev
