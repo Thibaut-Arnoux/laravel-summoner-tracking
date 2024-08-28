@@ -74,8 +74,8 @@ jobs:
         run: php artisan test --compact
       - name: Test coverage
         run: php artisan test --coverage --min=70
-        # Docker install here thanks to dind container and
-        # not installed in container image to have a php base image and not a dind base image
+        # Docker install here thanks to dind service
+        # and not installed in container image to have a php base image and not a dind base image
       - name: Install Docker
         run: |
           apt update
