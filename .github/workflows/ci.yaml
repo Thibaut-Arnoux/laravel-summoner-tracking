@@ -76,8 +76,8 @@ jobs:
         run: php artisan test --coverage --min=70
       - name: Install Docker
         run: |
-          apt-get update
-          apt-get install -y docker.io
+          apt update
+          apt install -y docker.io
       - name: Docker
         run: |
           docker version
