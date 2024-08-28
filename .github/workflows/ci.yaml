@@ -81,17 +81,11 @@ jobs:
           apt update
           apt install -y docker.io
       - name: Test Build Apache image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/production/apache2/Dockerfile
-          push: false
+        run: |
+          docker build -f ./docker/production/apache2/Dockerfile .
       - name: Test Build Php image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/production/php/Dockerfile
-          push: false
+        run: |
+          docker build -f ./docker/production/php/Dockerfile .
   clean-ci:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
