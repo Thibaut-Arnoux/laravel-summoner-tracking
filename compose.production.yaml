@@ -3,7 +3,7 @@ services:
         build:
             context: .
             dockerfile: docker/production/apache2/Dockerfile
-        image: laraops/apache2
+        image: lst/apache2
         ports:
             - '80:80'
         environment:
@@ -14,7 +14,7 @@ services:
         build:
             context: .
             dockerfile: docker/production/php/Dockerfile
-        image: laraops/php
+        image: lst/php
         env_file:
             - .env.production
         healthcheck:
@@ -31,7 +31,7 @@ services:
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD}'
         volumes:
-            - 'laraops-pgsql:/var/lib/postgresql/data'
+            - 'lst-pgsql:/var/lib/postgresql/data'
         healthcheck:
             test:
                 - CMD
@@ -44,4 +44,4 @@ services:
             retries: 3
             timeout: 5s
 volumes:
-    laraops-pgsql:
+    lst-pgsql:
