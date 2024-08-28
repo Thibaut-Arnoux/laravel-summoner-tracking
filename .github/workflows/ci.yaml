@@ -74,26 +74,24 @@ jobs:
         run: php artisan test --compact
       - name: Test coverage
         run: php artisan test --coverage --min=70
+        # Docker install here thanks to dind container and
+        # not installed in container image to have a php base image and not a dind base image
       - name: Install Docker
         run: |
           apt update
           apt install -y docker.io
-      - name: Docker
-        run: |
-          docker version
-          docker info
-      # - name: Test Build Apache image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: ./docker/production/apache2/Dockerfile
-      #     push: false
-      # - name: Test Build Php image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: ./docker/production/php/Dockerfile
-      #     push: false
+      - name: Test Build Apache image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/production/apache2/Dockerfile
+          push: false
+      - name: Test Build Php image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/production/php/Dockerfile
+          push: false
   clean-ci:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
