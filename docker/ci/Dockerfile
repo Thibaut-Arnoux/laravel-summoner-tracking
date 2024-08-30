@@ -5,7 +5,7 @@ WORKDIR /build
 
 COPY composer.json composer.lock ./
 
-RUN composer install --optimize-autoloader --no-dev --no-scripts
+RUN composer install --no-dev --no-scripts
 
 # Front Static Assets
 FROM node:20 AS frontend-builder
