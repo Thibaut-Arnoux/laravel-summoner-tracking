@@ -1,17 +1,29 @@
+# Composer UI Layer
+FROM composer:2.7 AS ui-builder
+
+WORKDIR /build
+
+COPY composer.json composer.lock ./
+
+RUN composer install --optimize-autoloader --no-dev --no-scripts
+
 # Front Static Assets
-# TODO : refacto build front
 FROM node:20 AS frontend-builder
 
 WORKDIR /build
 
-COPY /resources ./resources
 COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
+# required from tailwind config
+COPY /resources ./resources
+COPY /app/Livewire ./app/Livewire
+COPY /app/View/Components ./app/View/Components
+COPY --from=ui-builder /build/vendor/robsontenorio/mary/src/View/Components ./vendor/robsontenorio/mary/src/View/Components
 
 RUN npm ci \
     && npm run build
 
 # Php Ci Layer
-FROM php:8.3-fpm
+FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
