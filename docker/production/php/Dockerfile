@@ -13,7 +13,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --chown=www-data:www-data . .
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY docker/production/php/php.ini /usr/local/etc/php/conf.d/docker-php-ext-production.ini
 COPY docker/production/php/manifest.json /var/www/html/public/build/manifest.json
 

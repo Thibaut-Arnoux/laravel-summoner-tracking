@@ -40,7 +40,7 @@ RUN apt-get update \
 
 COPY . .
 COPY --from=frontend-builder /build/public/build ./public/build
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY docker/ci/php.ini /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
 
 RUN composer install
