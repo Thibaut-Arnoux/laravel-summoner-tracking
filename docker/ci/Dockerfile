@@ -1,4 +1,5 @@
 # Front Static Assets
+# TODO : refacto build front
 FROM node:20 AS frontend-builder
 
 WORKDIR /build

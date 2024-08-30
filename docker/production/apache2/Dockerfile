@@ -13,6 +13,9 @@ COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.co
 RUN npm ci \
     && npm run build
 
+# rename assets
+RUN mv ./public/build/assets/app*.js ./app.js && mv ./public/build/assets/app*.css ./app.css
+
 
 # Apache
 FROM httpd:2.4
@@ -31,6 +34,7 @@ RUN sed -i \
 USER www-data
 
 COPY --chown=www-data:www-data /public ./public
-COPY --from=frontend-builder --chown=www-data:www-data /build/public/build/assets ./public/build/assets
+COPY --from=frontend-builder --chown=www-data:www-data /build/app.js ./public/build/assets/app.js
+COPY --from=frontend-builder --chown=www-data:www-data /build/app.css ./public/build/assets/app.css
 
 CMD ["httpd-foreground", "-C", "PidFile /tmp/httpd.pid"]
