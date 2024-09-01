@@ -1,5 +1,7 @@
 name: Deployment
 on:
+  # TODO : remove after debug
+  workflow_dispatch:
   push:
     branches:
       - main
