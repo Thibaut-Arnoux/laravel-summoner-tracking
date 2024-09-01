@@ -54,6 +54,11 @@ jobs:
           POSTGRES_DB: testing # defined in phpunit.xml
           POSTGRES_USER: ${{ secrets.DB_USERNAME }}
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      docker:
+        image: docker:dind
+        options: --privileged # Required for Docker-in-Docker
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
     defaults:
       run:
         working-directory: /var/www/html
@@ -69,7 +74,18 @@ jobs:
         run: php artisan test --compact
       - name: Test coverage
         run: php artisan test --coverage --min=70
-        # TODO: Test docker build images (php-fpm / apache )for production
+        # Docker install here thanks to dind service
+        # and not installed in container image to have a php base image and not a dind base image
+      - name: Install Docker
+        run: |
+          apt update
+          apt install -y docker.io
+      - name: Test Build Apache image
+        run: |
+          docker build -f ./docker/production/apache2/Dockerfile .
+      - name: Test Build Php image
+        run: |
+          docker build -f ./docker/production/php/Dockerfile .
   clean-ci:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest

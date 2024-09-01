@@ -5,7 +5,8 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.3/app
+        image: sail-lst/php
+        container_name: sail-lst-php
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -25,6 +26,7 @@ services:
             - pgsql
     pgsql:
         image: 'postgres:15'
+        container_name: sail-lst-postgres
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:

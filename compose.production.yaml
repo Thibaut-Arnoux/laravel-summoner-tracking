@@ -1,0 +1,50 @@
+services:
+    apache2:
+        build:
+            context: .
+            dockerfile: docker/production/apache2/Dockerfile
+        image: lst/apache2
+        container_name: lst-apache2
+        ports:
+            - '80:80'
+        environment:
+            PHP_FPM: 'app'
+        depends_on:
+            - app
+    app:
+        build:
+            context: .
+            dockerfile: docker/production/php/Dockerfile
+        image: lst/php
+        container_name: lst-php
+        env_file:
+            - .env.production
+        healthcheck:
+            test: curl -f http://apache2/up || exit 1
+            retries: 3
+            timeout: 5s
+        depends_on:
+            - pgsql
+    pgsql:
+        image: 'postgres:15'
+        container_name: lst-postgres
+        environment:
+            PGPASSWORD: '${DB_PASSWORD}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+        volumes:
+            - 'lst-pgsql:/var/lib/postgresql/data'
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
+            retries: 3
+            timeout: 5s
+volumes:
+    lst-pgsql:
