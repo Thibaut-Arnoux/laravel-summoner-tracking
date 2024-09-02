@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: write
     steps:
+      # https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/
       - name: Generate a token
         id: generate_token
         uses: actions/create-github-app-token@1
