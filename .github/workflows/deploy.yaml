@@ -16,7 +16,6 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ github.token }}
-          skip-git-pull: 'true'
           skip-version-file: 'true'
           skip-bump: 'true'
       # TODO : Generate a github release ?
