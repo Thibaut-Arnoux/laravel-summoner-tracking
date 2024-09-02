@@ -1,36 +1,29 @@
 name: Deployment
 on:
   workflow_dispatch:
-  # Wait for automatic deployment
-  # push:
-  #   branches:
-  #     - main
-jobs:
-  changelog:
+  push:
+    branches:
+      - main
+  build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: build
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Conventional Changelog Action
+        id: changelog
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ github.token }}
-      # TODO : Generate a github release ?
-  build:
-    needs: changelog
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Docker Apache meta
         id: apache-meta
         uses: docker/metadata-action@v5
@@ -38,12 +31,14 @@ jobs:
           images: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY_APACHE }}
       - name: Build and push Apache
         uses: docker/build-push-action@v5
+        if: steps.changelog.outputs.skipped == 'false'
         with:
           context: .
           file: ./docker/production/apache2/Dockerfile
-          tags: ${{ steps.apache-meta.outputs.tags }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY_APACHE }}:latest,${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY_APACHE }}:${{ steps.changelog.outputs.version }}
           labels: ${{ steps.apache-meta.outputs.labels }}
           push: true
+
       - name: Docker App meta
         id: app-meta
         uses: docker/metadata-action@v5
@@ -51,9 +46,16 @@ jobs:
           images: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY }}
       - name: Build and push App
         uses: docker/build-push-action@v5
+        if: steps.changelog.outputs.skipped == 'false'
         with:
           context: .
           file: ./docker/production/php/Dockerfile
-          tags: ${{ steps.app-meta.outputs.tags }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY }}:latest,${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.changelog.outputs.version }}
           labels: ${{ steps.app-meta.outputs.labels }}
           push: true
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy
+        run: echo "Deploying..."
