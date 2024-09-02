@@ -6,7 +6,22 @@ on:
   #   branches:
   #     - main
 jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ${{ github.token }}
+          skip-git-pull: 'true'
+          skip-version-file: 'true'
+          skip-bump: 'true'
+      # TODO : Generate a github release ?
   build:
+    needs: changelog
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -17,14 +32,6 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Conventional Changelog Action
-        uses: TriPSs/conventional-changelog-action@v5
-        with:
-          github-token: ${{ github.token }}
-          skip-git-pull: 'true'
-          skip-version-file: 'true'
-          skip-bump: 'true'
-      # TODO : Generate a github release ?
       - name: Docker Apache meta
         id: apache-meta
         uses: docker/metadata-action@v5
