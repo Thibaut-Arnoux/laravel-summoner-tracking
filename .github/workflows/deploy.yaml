@@ -3,18 +3,16 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: build
-    permissions:
-      contents: write
     steps:
       # https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/
       - name: Generate a token
         id: generate_token
-        uses: actions/create-github-app-token@1
+        uses: actions/create-github-app-token@v1
         with:
           app_id: ${{ secrets.RELEASER_APP_ID }}
           private_key: ${{ secrets.RELEASER_PRIVATE_KEY }}
