@@ -1,4 +1,13 @@
-# 0.1.0 (2024-09-02)
+## [0.1.1](https://github.com/Thibaut-Arnoux/laravel-summoner-tracking/compare/v0.1.0...v0.1.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* update title from welcome view ([#17](https://github.com/Thibaut-Arnoux/laravel-summoner-tracking/issues/17)) ([9921a54](https://github.com/Thibaut-Arnoux/laravel-summoner-tracking/commit/9921a547665fe89294ae432b117ccec7298392c3))
+
+
+
+# [0.1.0](https://github.com/Thibaut-Arnoux/laravel-summoner-tracking/compare/0958ce4a0f13775d7a6db6721e63607d25a9c385...v0.1.0) (2024-09-02)
 
 
 ### Features
