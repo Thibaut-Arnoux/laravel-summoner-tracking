@@ -12,6 +12,9 @@ FROM node:20 AS frontend-builder
 
 WORKDIR /build
 
+RUN apt-get update \
+    && apt-get install -y jq
+
 COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
 # required from tailwind config
 COPY /resources ./resources
@@ -21,9 +24,11 @@ COPY --from=ui-builder /build/vendor/robsontenorio/mary/src/View/Components ./ve
 
 RUN npm ci \
     && npm run build \
-    # rename assets to static name used in manifest.json from php layer
-    && mv ./public/build/assets/app*.js ./app.js \
-    && mv ./public/build/assets/app*.css ./app.css
+    && mkdir dist \
+    # rename assets to static name with version to be used in manifest.json from php layer
+    && VERSION=$(jq -r '.version' package.json) \
+    && mv ./public/build/assets/app*.js ./dist/app-${VERSION}.js \
+    && mv ./public/build/assets/app*.css ./dist/app-${VERSION}.css
 
 
 # Apache
@@ -43,7 +48,6 @@ RUN sed -i \
 USER www-data
 
 COPY --chown=www-data:www-data /public ./public
-COPY --from=frontend-builder --chown=www-data:www-data /build/app.js ./public/build/assets/app.js
-COPY --from=frontend-builder --chown=www-data:www-data /build/app.css ./public/build/assets/app.css
+COPY --from=frontend-builder --chown=www-data:www-data /build/dist ./public/build/assets/
 
 CMD ["httpd-foreground", "-C", "PidFile /tmp/httpd.pid"]

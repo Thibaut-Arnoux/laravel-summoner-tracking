@@ -4,7 +4,7 @@ FROM php:8.3-fpm
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y zip unzip libpq-dev \
+    && apt-get install -y jq zip unzip libpq-dev \
     # php extensions
     && docker-php-ext-install pdo pdo_pgsql sockets \
     # clean
@@ -15,7 +15,10 @@ RUN apt-get update \
 COPY --chown=www-data:www-data . .
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY docker/production/php/php.ini /usr/local/etc/php/conf.d/docker-php-ext-production.ini
+
 COPY docker/production/php/manifest.json /var/www/html/public/build/manifest.json
+RUN VERSION=$(jq -r '.version' package.json) \
+    && sed -i "s/#VERSION#/${VERSION}/g" /var/www/html/public/build/manifest.json
 
 USER www-data
 
