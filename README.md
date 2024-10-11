@@ -35,6 +35,6 @@
 
 ## Dockerhub
 
-CI : https://hub.docker.com/repository/docker/thibautarnoux/laravel-summoner-tracking-ci/general  
+CI : https://hub.docker.com/repository/docker/thibautarnoux/laravel-summoner-tracking-ci  
 Apache : https://hub.docker.com/repository/docker/thibautarnoux/laravel-summoner-tracking-apache  
-App : https://hub.docker.com/repository/docker/thibautarnoux/laravel-summoner-tracking/general
+App : https://hub.docker.com/repository/docker/thibautarnoux/laravel-summoner-tracking
