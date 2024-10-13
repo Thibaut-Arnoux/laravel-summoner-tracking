@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Welcome;
+use App\Services\Riot\RiotService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', Welcome::class);
+
+// DEBUG
+Route::get('/riot/account/{puuid}', function (string $puuid, RiotService $riotService) {
+    return $riotService->accountByPuuid($puuid);
+});
+
+Route::get('/riot/account/{gameName}/{tagLine}', function (RiotService $riotService, string $gameName, string $tagLine) {
+    return $riotService->accountByNameAndTag($gameName, $tagLine);
+});

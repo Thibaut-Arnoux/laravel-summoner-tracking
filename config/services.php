@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'riot' => [
+        'api_key' => env('RIOT_API_KEY'),
+        'base_uri' => env('RIOT_BASE_URI'),
+        'region_name' => env('RIOT_REGION_NAME'),
+    ],
+
 ];
