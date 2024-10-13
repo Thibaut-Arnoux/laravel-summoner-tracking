@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Welcome;
+use App\Services\Riot\Enums\RegionTagEnum;
 use App\Services\Riot\RiotService;
 use Illuminate\Support\Facades\Route;
 
@@ -18,10 +19,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', Welcome::class);
 
 // DEBUG
+
+// Account
 Route::get('/riot/account/{puuid}', function (string $puuid, RiotService $riotService) {
     return $riotService->accountByPuuid($puuid);
 });
 
 Route::get('/riot/account/{gameName}/{tagLine}', function (RiotService $riotService, string $gameName, string $tagLine) {
     return $riotService->accountByNameAndTag($gameName, $tagLine);
+});
+
+// Summoner
+Route::get('/riot/summoner/{regionTag}/puuid/{puuid}', function (RiotService $riotService, RegionTagEnum $regionTag, string $puuid) {
+    return $riotService->summonerByPuuid($regionTag, $puuid);
+});
+
+Route::get('/riot/summoner/{regionTag}/accountId/{accountId}', function (RiotService $riotService, RegionTagEnum $regionTag, string $accountId) {
+    return $riotService->summonerByAccountId($regionTag, $accountId);
+});
+
+Route::get('/riot/summoner/{regionTag}/summonerId/{summonerId}', function (RiotService $riotService, RegionTagEnum $regionTag, string $summonerId) {
+    return $riotService->summonerById($regionTag, $summonerId);
 });

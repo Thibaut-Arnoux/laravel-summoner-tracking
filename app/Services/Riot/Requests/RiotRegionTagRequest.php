@@ -6,7 +6,7 @@ use App\Services\Riot\Enums\RegionTagEnum;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use JustSteveKing\Transporter\Request;
 
-class RiotRegionTagRequest extends Request
+abstract class RiotRegionTagRequest extends Request
 {
     public function __construct(HttpFactory $http, RegionTagEnum $regionTag)
     {

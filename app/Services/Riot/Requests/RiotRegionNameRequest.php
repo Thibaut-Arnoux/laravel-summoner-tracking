@@ -5,7 +5,7 @@ namespace App\Services\Riot\Requests;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use JustSteveKing\Transporter\Request;
 
-class RiotRegionNameRequest extends Request
+abstract class RiotRegionNameRequest extends Request
 {
     public function __construct(HttpFactory $http)
     {
