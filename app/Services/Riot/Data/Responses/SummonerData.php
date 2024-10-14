@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Riot\Data;
+namespace App\Services\Riot\Data\Responses;
 
 use Spatie\LaravelData\Data;
 

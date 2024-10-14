@@ -2,11 +2,17 @@
 
 namespace App\Services\Riot;
 
-use App\Services\Riot\Data\AccountData;
-use App\Services\Riot\Data\SummonerData;
+use App\Services\Riot\Data\Responses\AccountData;
+use App\Services\Riot\Data\Responses\LeagueEntryData;
+use App\Services\Riot\Data\Responses\SummonerData;
+use App\Services\Riot\Enums\QueueEnum;
+use App\Services\Riot\Enums\RankEnum;
 use App\Services\Riot\Enums\RegionTagEnum;
+use App\Services\Riot\Enums\TierEnum;
 use App\Services\Riot\Requests\Account\GetAccountRequest;
+use App\Services\Riot\Requests\League\GetLeagueEntryRequest;
 use App\Services\Riot\Requests\Summoner\GetSummonerRequest;
+use Illuminate\Support\Collection;
 
 class RiotService
 {
@@ -57,6 +63,37 @@ class RiotService
             ->send()
             ->throw()
             ->json()
+        );
+    }
+
+    /**
+     * @return Collection<int, LeagueEntryData>
+     */
+    public function leagueBySummoner(RegionTagEnum $regionTag, string $summonerId): Collection
+    {
+        return LeagueEntryData::collect(
+            items: GetLeagueEntryRequest::build(...['regionTag' => $regionTag])
+                ->withSummonerId($summonerId)
+                ->send()
+                ->throw()
+                ->json(),
+            into: Collection::class
+        );
+    }
+
+    /**
+     * @return Collection<int, LeagueEntryData>
+     */
+    public function leagueByQueueTierRank(RegionTagEnum $regionTag, QueueEnum $queueType, TierEnum $tier, RankEnum $rank, int $page = 1): Collection
+    {
+        return LeagueEntryData::collect(
+            items: GetLeagueEntryRequest::build(...['regionTag' => $regionTag])
+                ->withQueueTierRank($queueType, $tier, $rank)
+                ->withQuery(['page' => $page])
+                ->send()
+                ->throw()
+                ->json(),
+            into: Collection::class
         );
     }
 }
