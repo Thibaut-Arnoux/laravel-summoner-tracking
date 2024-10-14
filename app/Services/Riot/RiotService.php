@@ -3,14 +3,17 @@
 namespace App\Services\Riot;
 
 use App\Services\Riot\Data\Responses\AccountData;
+use App\Services\Riot\Data\Responses\LeagueData;
 use App\Services\Riot\Data\Responses\LeagueEntryData;
 use App\Services\Riot\Data\Responses\SummonerData;
+use App\Services\Riot\Enums\LeagueEnum;
 use App\Services\Riot\Enums\QueueEnum;
 use App\Services\Riot\Enums\RankEnum;
 use App\Services\Riot\Enums\RegionTagEnum;
 use App\Services\Riot\Enums\TierEnum;
 use App\Services\Riot\Requests\Account\GetAccountRequest;
 use App\Services\Riot\Requests\League\GetLeagueEntryRequest;
+use App\Services\Riot\Requests\League\GetLeagueRequest;
 use App\Services\Riot\Requests\Summoner\GetSummonerRequest;
 use Illuminate\Support\Collection;
 
@@ -94,6 +97,16 @@ class RiotService
                 ->throw()
                 ->json(),
             into: Collection::class
+        );
+    }
+
+    public function leagueByQueueName(RegionTagEnum $regionTag, LeagueEnum $league, QueueEnum $queueType): LeagueData
+    {
+        return LeagueData::from(GetLeagueRequest::build(...['regionTag' => $regionTag])
+            ->withQueue($league, $queueType)
+            ->send()
+            ->throw()
+            ->json()
         );
     }
 }
