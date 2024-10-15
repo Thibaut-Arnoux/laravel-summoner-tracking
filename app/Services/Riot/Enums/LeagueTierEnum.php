@@ -2,7 +2,7 @@
 
 namespace App\Services\Riot\Enums;
 
-enum LeagueEnum: string
+enum LeagueTierEnum: string
 {
     case CHALLENGER = 'challengerleagues';
     case GRANDMASTER = 'grandmasterleagues';

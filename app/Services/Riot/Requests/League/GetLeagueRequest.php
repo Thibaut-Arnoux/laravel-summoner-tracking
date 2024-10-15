@@ -2,19 +2,16 @@
 
 namespace App\Services\Riot\Requests\League;
 
-use App\Services\Riot\Enums\LeagueEnum;
-use App\Services\Riot\Enums\QueueEnum;
 use App\Services\Riot\Requests\RiotRegionTagRequest;
 
 class GetLeagueRequest extends RiotRegionTagRequest
 {
     protected string $method = 'GET';
 
-    protected string $path = '/lol/league/v4/%s/by-queue';
+    protected string $path = '/lol/league/v4/leagues';
 
-    public function withQueue(LeagueEnum $league, QueueEnum $queue): self
+    public function withId(string $leagueId): self
     {
-        return $this->setPath(sprintf($this->path, $league->value))
-            ->appendPath($queue->value);
+        return $this->appendPath("{$leagueId}");
     }
 }
