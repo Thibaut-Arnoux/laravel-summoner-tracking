@@ -82,10 +82,10 @@ jobs:
           apt install -y docker.io
       - name: Test Build Apache image
         run: |
-          docker build -f ./docker/production/apache2/Dockerfile .
+          docker build -f ./docker/production/Dockerfile --target apache2 .
       - name: Test Build Php image
         run: |
-          docker build -f ./docker/production/php/Dockerfile .
+          docker build -f ./docker/production/Dockerfile --target php .
   clean-ci:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest

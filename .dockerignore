@@ -2,6 +2,7 @@
 .git*
 /vendor
 /node_modules
+/public/hot
 /storage/*.key
 /.fleet
 /.idea
