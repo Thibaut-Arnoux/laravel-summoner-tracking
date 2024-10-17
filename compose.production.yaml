@@ -9,10 +9,10 @@ services:
         ports:
             - '80:80'
         environment:
-            PHP_FPM: 'app'
+            PHP_FPM: 'php'
         depends_on:
-            - app
-    app:
+            - php
+    php:
         build:
             context: .
             dockerfile: docker/production/Dockerfile
