@@ -40,7 +40,8 @@ jobs:
         if: steps.changelog.outputs.skipped == 'false'
         with:
           context: .
-          file: ./docker/production/apache2/Dockerfile
+          file: ./docker/production/Dockerfile
+          target: apache2
           tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY_APACHE }}:latest,${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY_APACHE }}:${{ steps.changelog.outputs.version }}
           labels: ${{ steps.apache-meta.outputs.labels }}
           push: true
@@ -55,7 +56,8 @@ jobs:
         if: steps.changelog.outputs.skipped == 'false'
         with:
           context: .
-          file: ./docker/production/php/Dockerfile
+          file: ./docker/production/Dockerfile
+          target: php
           tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY }}:latest,${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.changelog.outputs.version }}
           labels: ${{ steps.app-meta.outputs.labels }}
           push: true
