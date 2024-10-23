@@ -63,10 +63,12 @@ jobs:
       run:
         working-directory: /var/www/html
     steps:
-      - name: Lint
-        run: ./vendor/bin/pint
+      - name: Lint Php
+        run: ./vendor/bin/pint --test
+      - name: Lint Blade
+        run: ./node_modules/.bin/blade-formatter -c resources/**/*.blade.php
       - name: Static analysis
-        run: ./vendor/bin/phpstan
+        run: ./vendor/bin/phpstan -n
         # Use to fix laravel test warning, env variables are set on container level
       - name: Empty testing envfile
         run: touch .env.testing
