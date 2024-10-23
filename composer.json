@@ -59,7 +59,8 @@
             "@php artisan ide-helper:models -n"
         ],
         "clean": [
-            "./vendor/bin/pint --dirty",
+            "./vendor/bin/pint",
+            "./node_modules/.bin/blade-formatter --write resources/**/*.blade.php",
             "./vendor/bin/phpstan -n"
         ]
     },
