@@ -1,9 +1,6 @@
 <?php
 
 use App\Livewire\Welcome;
-use App\Services\Riot\Data\Contracts\RegionData;
-use App\Services\Riot\Enums\RegionTagEnum;
-use App\Services\Riot\RiotService;
 use Illuminate\Support\Facades\Route;
 
 /*
