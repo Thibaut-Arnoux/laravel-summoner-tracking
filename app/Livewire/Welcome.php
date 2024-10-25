@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Services\Riot\Enums\RegionTagEnum;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
@@ -19,10 +18,7 @@ class Welcome extends Component
 
     public string $summonerName = '';
 
-    /**
-     * @var array<int, string>
-     */
-    public array $summonerTag = [];
+    public string $summonerTag = '';
 
     public function regionName(RegionTagEnum $regionTag): string
     {
@@ -50,7 +46,7 @@ class Welcome extends Component
     public function mount(): void
     {
         $this->regionTag = RegionTagEnum::EUW;
-        $this->summonerTag = [strtoupper($this->regionTag->value)];
+        $this->summonerTag = strtoupper($this->regionTag->value);
         $this->regions = collect(RegionTagEnum::cases())
             ->map(fn (RegionTagEnum $regionTag) => [
                 'id' => $regionTag->value,
@@ -61,12 +57,7 @@ class Welcome extends Component
 
     public function updatedRegionTag(): void
     {
-        $this->summonerTag = [strtoupper($this->regionTag->value)];
-    }
-
-    public function updatedSummonerTag(): void
-    {
-        $this->summonerTag = Arr::last($this->summonerTag) ? [strtoupper(Arr::last($this->summonerTag))] : [];
+        $this->summonerTag = strtoupper($this->regionTag->value);
     }
 
     public function render(): View
