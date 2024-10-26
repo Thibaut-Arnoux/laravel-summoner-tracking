@@ -6,7 +6,7 @@ use App\Services\Riot\Enums\RegionTagEnum;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class SummonerSearchForm extends Form
+class SearchSummonerForm extends Form
 {
     #[Validate('required')]
     public RegionTagEnum $regionTag = RegionTagEnum::EUW;
