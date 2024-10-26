@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\SummonerSearchForm;
 use App\Services\Riot\Enums\RegionTagEnum;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -9,55 +10,35 @@ use Livewire\Component;
 
 class Welcome extends Component
 {
-    public RegionTagEnum $regionTag;
-
     /**
      * @var Collection<int, array{id: string, name: string}>
      */
     public Collection $regions;
 
-    public string $summonerName = '';
+    public SummonerSearchForm $form;
 
-    public string $summonerTag = '';
-
-    public function regionName(RegionTagEnum $regionTag): string
+    public function searchSummoner(): void
     {
-        return match ($regionTag) {
-            RegionTagEnum::BR => 'Brazil',
-            RegionTagEnum::EUN => 'Europe East',
-            RegionTagEnum::EUW => 'Europe West',
-            RegionTagEnum::JP => 'Japan',
-            RegionTagEnum::KR => 'Korea',
-            RegionTagEnum::LA1 => 'LAN',
-            RegionTagEnum::LA2 => 'LAS',
-            RegionTagEnum::ME => 'Middle East',
-            RegionTagEnum::NA => 'North America',
-            RegionTagEnum::OC => 'Oceania',
-            RegionTagEnum::PH => 'Philippines',
-            RegionTagEnum::RU => 'Russia',
-            RegionTagEnum::SG => 'Singapore',
-            RegionTagEnum::TH => 'Thailand',
-            RegionTagEnum::TR => 'Turkiye',
-            RegionTagEnum::TW => 'Taiwan',
-            RegionTagEnum::VN => 'Vietnam',
-        };
+        $this->form->validate();
+        $this->form->reset();
+        $this->form->summonerTag = $this->form->regionTag->getSummonerTag();
     }
 
     public function mount(): void
     {
-        $this->regionTag = RegionTagEnum::EUW;
-        $this->summonerTag = strtoupper($this->regionTag->value);
+        $this->form->summonerTag = $this->form->regionTag->getSummonerTag();
+
         $this->regions = collect(RegionTagEnum::cases())
             ->map(fn (RegionTagEnum $regionTag) => [
                 'id' => $regionTag->value,
-                'name' => $this->regionName($regionTag),
+                'name' => $regionTag->getRegionName(),
             ])
             ->sortBy('name');
     }
 
-    public function updatedRegionTag(): void
+    public function updatedFormRegionTag(): void
     {
-        $this->summonerTag = strtoupper($this->regionTag->value);
+        $this->form->summonerTag = $this->form->regionTag->getSummonerTag();
     }
 
     public function render(): View
