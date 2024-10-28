@@ -39,6 +39,8 @@ return [
         'api_key' => env('RIOT_API_KEY'),
         'base_uri' => env('RIOT_BASE_URI'),
         'region_name' => env('RIOT_REGION_NAME'),
+        'patch_version' => env('RIOT_PATCH_VERSION'),
+        'ddragon_uri' => env('RIOT_DDRAGON_URI'),
     ],
 
 ];

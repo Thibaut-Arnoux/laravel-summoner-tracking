@@ -20,6 +20,8 @@ class SearchSummoner extends Component
     public function searchSummoner(): void
     {
         $this->form->validate();
+        $this->dispatch('search-summoner', search: $this->form->all());
+
         $this->form->reset();
         $this->form->summonerTag = $this->form->regionTag->getSummonerTag();
     }
