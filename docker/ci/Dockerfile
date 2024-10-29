@@ -5,9 +5,9 @@ ARG NODE_VERSION=20
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y gnupg zip unzip libpq-dev \
+    && apt-get install -y gnupg zip unzip libpq-dev libicu-dev \
     # php extensions
-    && docker-php-ext-install pdo pdo_pgsql sockets \
+    && docker-php-ext-install pdo pdo_pgsql sockets intl \
     # xdebug in coverage mode required for pest coverage cli
     && pecl install xdebug && docker-php-ext-enable xdebug \
     # nodejs
@@ -25,5 +25,4 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 COPY docker/ci/php.ini /usr/local/etc/php/conf.d/docker-php-ext-ci.ini
 
 RUN composer install \
-    && npm ci \
-    && npm run build
+    && npm ci

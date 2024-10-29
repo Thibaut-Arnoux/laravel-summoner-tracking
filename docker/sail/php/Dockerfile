@@ -15,9 +15,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update \
     && mkdir -p /etc/apt/keyrings \
     # removed sail packages (unused or already installed) : curl ca-certificates git sqlite3 libpng-dev python2 dnsutils librsvg2-bin fswatch ffmpeg nano
-    && apt-get install -y gnupg gosu zip unzip supervisor libcap2-bin libpq-dev $PHPIZE_DEPS \
+    && apt-get install -y gnupg gosu zip unzip supervisor libcap2-bin libpq-dev libicu-dev $PHPIZE_DEPS \
     # php extensions
-    && docker-php-ext-install pdo pdo_pgsql sockets \
+    && docker-php-ext-install pdo pdo_pgsql sockets intl \
     && pecl install xdebug && docker-php-ext-enable xdebug \
     # nodejs
     && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \

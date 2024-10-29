@@ -61,9 +61,9 @@ FROM php:8.3-fpm AS php
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y zip unzip libpq-dev \
+    && apt-get install -y zip unzip libpq-dev libicu-dev \
     # php extensions
-    && docker-php-ext-install pdo pdo_pgsql sockets \
+    && docker-php-ext-install pdo pdo_pgsql sockets intl \
     # clean
     && apt-get -y autoremove \
     && apt-get clean \
