@@ -25,43 +25,42 @@ class ProfileSummoner extends Component
     public SummonerData $summoner;
 
     /**
-     * @var Collection<int, LeagueEntryData>
+     * @var Collection<string, LeagueEntryData|null>
      */
-    public Collection $leagues;
+    public Collection $leagueDatas;
 
     public function mount(string $puuid, RegionTagEnum $regionTag, RiotService $riot): void
     {
         $this->puuid = $puuid;
         $this->regionTag = $regionTag;
-        $this->summoner = $riot->summonerByPuuid(regionTag: $this->regionTag, puuid: $this->puuid);
-        $this->leagues = $riot->leagueBySummonerId(regionTag: $this->regionTag, summonerId: $this->summoner->id)
-            ->filter(fn (LeagueEntryData $league) => in_array($league->queueType, [QueueEnum::RANKED_SOLO_5x5, QueueEnum::RANKED_FLEX_SR]))
-            ->sortBy(fn (LeagueEntryData $league) => $league->queueType === QueueEnum::RANKED_SOLO_5x5 ? 0 : 1);
+        $this->reactiveProps($riot);
     }
 
     public function reactiveProps(RiotService $riot): void
     {
         $this->summoner = $riot->summonerByPuuid(regionTag: $this->regionTag, puuid: $this->puuid);
-        $this->leagues = $riot->leagueBySummonerId(regionTag: $this->regionTag, summonerId: $this->summoner->id)
-            ->filter(fn (LeagueEntryData $league) => in_array($league->queueType, [QueueEnum::RANKED_SOLO_5x5, QueueEnum::RANKED_FLEX_SR]))
-            ->sortBy(fn (LeagueEntryData $league) => $league->queueType === QueueEnum::RANKED_SOLO_5x5 ? 0 : 1);
+        $leaguesInfo = $riot->leagueBySummonerId(regionTag: $this->regionTag, summonerId: $this->summoner->id);
+        $this->leagueDatas = collect([
+            QueueEnum::RANKED_SOLO_5x5->value => $leaguesInfo->where('queueType', QueueEnum::RANKED_SOLO_5x5)->first(),
+            QueueEnum::RANKED_FLEX_SR->value => $leaguesInfo->where('queueType', QueueEnum::RANKED_FLEX_SR)->first(),
+        ]);
     }
 
     public function render(): View
     {
         return view('livewire.components.feature.profile-summoner', [
             'badgeImgSrc' => config('services.riot.ddragon_uri')."/img/profileicon/{$this->summoner->profileIconId}.png",
-            'leagueDatas' => $this->leagues->map(function (LeagueEntryData $league) {
-                return [
-                    'queueType' => $league->queueType,
-                    'cardImgSrc' => Vite::asset("resources/images/tier/" . Str::lower($league->tier->value) . ".png"),
-                    'tier' => $league->tier->value,
-                    'rank' => $league->rank->value,
-                    'wins' => $league->wins,
-                    'losses' => $league->losses,
-                    'lp' => $league->leaguePoints,
-                ];
-            })
+            'leagues' => $this->leagueDatas->map(function (?LeagueEntryData $leagueData, string $queueType) {
+                return $leagueData ? [
+                    'queueType' => $queueType,
+                    'cardImgSrc' => Vite::asset('resources/images/tier/'.Str::lower($leagueData->tier->value).'.png'),
+                    'tier' => $leagueData->tier->value,
+                    'rank' => $leagueData->rank->value,
+                    'wins' => $leagueData->wins,
+                    'losses' => $leagueData->losses,
+                    'lp' => $leagueData->leaguePoints,
+                ] : [];
+            }),
         ]);
     }
 }
